@@ -89,50 +89,56 @@ const App = () => {
 
   return (
     <div className='main'>
-      <h1>Desserts</h1>
-      <ul className='productList'>
-        {products.map((product) => (
-          <li key={product.id}>
-            <img src={product.image} alt={product.title} width={100} />
-            <p>{product.category}</p>
-            <h2>{product.title}</h2>
-            <p>${product.price}</p>
-            {!cart.some((item) => item.id === product.id) ? (
-              <button onClick={() => addToCart(product)}>Add to Cart</button>
-            ) : (
-              <div>
-                <button onClick={() => decreaseQuantity(product.id)}>-</button>
-                <button onClick={() => increaseQuantity(product.id)}>+</button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div className='container'>
+        <div className='products'>
+          <h1>Desserts</h1>
+          <ul className='products_list'>
+            {products.map((product) => (
+              <li key={product.id}>
+                <div className='product__list-imgContainer'>
+                  <img src={product.image} alt={product.title} width={100} />
+                  {!cart.some((item) => item.id === product.id) ? (
+                    <button className='product__addToCart' onClick={() => addToCart(product)}>Add to Cart</button>
+                  ) : (
+                    <div className='product__list-controls'>
+                      <button onClick={() => decreaseQuantity(product.id)}>-</button>
+                      <button onClick={() => increaseQuantity(product.id)}>+</button>
+                    </div>
+                  )}
+                </div>
+                <p>{product.category}</p>
+                <h2>{product.title}</h2>
+                <p>${product.price}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      <div className='cart'>
-        <h2>Your Cart ({cart.reduce((total, item) => total + item.quantity, 0)})</h2>
-        {cart.length === 0 ? (
-          <p>Your cart is empty.</p>
-        ) : (
-          <div>
-            <ul>
-              {cart.map((item) => (
-                <li key={item.id}>
-                  <h4>{item.title}</h4>
-                  <span>{item.quantity}x</span>
-                  <span>$ {item.price} </span>
-                  <button onClick={() => removeFromCart(item.id)}>Remove</button>
-                </li>
-              ))}
-            </ul>
+        <div className='cart'>
+          <h2>Your Cart ({cart.reduce((total, item) => total + item.quantity, 0)})</h2>
+          {cart.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
             <div>
-              <p>Order Total</p>
-              <span>
-                $ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
-              </span>
+              <ul>
+                {cart.map((item) => (
+                  <li key={item.id}>
+                    <h4>{item.title}</h4>
+                    <span>{item.quantity}x</span>
+                    <span>$ {item.price} </span>
+                    <button onClick={() => removeFromCart(item.id)}>Remove</button>
+                  </li>
+                ))}
+              </ul>
+              <div>
+                <p>Order Total</p>
+                <span>
+                  $ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
+                </span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
