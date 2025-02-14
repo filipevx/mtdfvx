@@ -4,6 +4,7 @@ import { ReactComponent as CartIcon } from './assets/icon-add-to-cart.svg';
 import { ReactComponent as DecrementIcon } from './assets/icon-decrement-quantity.svg';
 import { ReactComponent as IncrementIcon } from './assets/icon-increment-quantity.svg';
 import { ReactComponent as EmptyCartIcon } from './assets/illustration-empty-cart.svg';
+import { ReactComponent as RemoveIcon } from './assets/icon-remove-item.svg';
 import './css/App.css';
 
 type Product = {
@@ -131,15 +132,19 @@ const App = () => {
               <div>
                 <ul>
                   {cart.map((item) => (
-                    <li key={item.id}>
-                      <h4>{item.title}</h4>
-                      <span>{item.quantity}x</span>
-                      <span>$ {item.price} </span>
-                      <button onClick={() => removeFromCart(item.id)}>Remove</button>
+                    <li key={item.id} className='cartItem'>
+                      <h4 className='cartItem__title'>{item.title}</h4>
+                      <div className='cartItem__resume'>
+                        <div>
+                          <span className='cartItem__quantity'>{item.quantity}x</span>
+                          <span className='cartItem__price'>@ ${item.price} <b>${(item.price * item.quantity).toFixed(2)}</b></span>
+                        </div>
+                        <button onClick={() => removeFromCart(item.id)} className='button-remove'><RemoveIcon className='remove-icon' /> </button>
+                      </div>
                     </li>
                   ))}
                 </ul>
-                <div>
+                <div className='cart__total'>
                   <p>Order Total</p>
                   <span>
                     $ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
