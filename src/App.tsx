@@ -3,6 +3,7 @@ import { fetchProducts } from './api/products';
 import { ReactComponent as CartIcon } from './assets/icon-add-to-cart.svg';
 import { ReactComponent as DecrementIcon } from './assets/icon-decrement-quantity.svg';
 import { ReactComponent as IncrementIcon } from './assets/icon-increment-quantity.svg';
+import { ReactComponent as EmptyCartIcon } from './assets/illustration-empty-cart.svg';
 import './css/App.css';
 
 type Product = {
@@ -119,29 +120,34 @@ const App = () => {
         </div>
 
         <div className='cart'>
-          <h2>Your Cart ({cart.reduce((total, item) => total + item.quantity, 0)})</h2>
-          {cart.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            <div>
-              <ul>
-                {cart.map((item) => (
-                  <li key={item.id}>
-                    <h4>{item.title}</h4>
-                    <span>{item.quantity}x</span>
-                    <span>$ {item.price} </span>
-                    <button onClick={() => removeFromCart(item.id)}>Remove</button>
-                  </li>
-                ))}
-              </ul>
+          <div className='cart__container'>
+            <h2 className='cart__title'>Your Cart ({cart.reduce((total, item) => total + item.quantity, 0)})</h2>
+            {cart.length === 0 ? (
+              <>
+                <EmptyCartIcon className='emptycart-icon' />
+                <p className='cart__text'>Your added items will appear here</p>
+              </>
+            ) : (
               <div>
-                <p>Order Total</p>
-                <span>
-                  $ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
-                </span>
+                <ul>
+                  {cart.map((item) => (
+                    <li key={item.id}>
+                      <h4>{item.title}</h4>
+                      <span>{item.quantity}x</span>
+                      <span>$ {item.price} </span>
+                      <button onClick={() => removeFromCart(item.id)}>Remove</button>
+                    </li>
+                  ))}
+                </ul>
+                <div>
+                  <p>Order Total</p>
+                  <span>
+                    $ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
