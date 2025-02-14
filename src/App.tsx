@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProducts } from './api/products';
+import { ReactComponent as CartIcon } from './assets/icon-add-to-cart.svg';
+import { ReactComponent as DecrementIcon } from './assets/icon-decrement-quantity.svg';
+import { ReactComponent as IncrementIcon } from './assets/icon-increment-quantity.svg';
 import './css/App.css';
 
 type Product = {
@@ -91,24 +94,25 @@ const App = () => {
     <div className='main'>
       <div className='container'>
         <div className='products'>
-          <h1>Desserts</h1>
-          <ul className='products_list'>
+          <h1 className='products__title'>Desserts</h1>
+          <ul className='products__list'>
             {products.map((product) => (
-              <li key={product.id}>
-                <div className='product__list-imgContainer'>
+              <li key={product.id} className='product'>
+                <div className='product__imgContainer'>
                   <img src={product.image} alt={product.title} width={100} />
                   {!cart.some((item) => item.id === product.id) ? (
-                    <button className='product__addToCart' onClick={() => addToCart(product)}>Add to Cart</button>
+                    <button className='product-addToCart' onClick={() => addToCart(product)}><CartIcon className='cart-icon' /> Add to Cart</button>
                   ) : (
-                    <div className='product__list-controls'>
-                      <button onClick={() => decreaseQuantity(product.id)}>-</button>
-                      <button onClick={() => increaseQuantity(product.id)}>+</button>
+                    <div className='product__controls'>
+                      <button onClick={() => decreaseQuantity(product.id)}><DecrementIcon className='decrement-icon' /></button>
+                      <span>{cart.find((item) => item.id === product.id)?.quantity || 0}</span>
+                      <button onClick={() => increaseQuantity(product.id)}><IncrementIcon className='increment-icon' /></button>
                     </div>
                   )}
                 </div>
-                <p>{product.category}</p>
-                <h2>{product.title}</h2>
-                <p>${product.price}</p>
+                <p className='product__category'>{product.category}</p>
+                <h2 className='product__title'>{product.title}</h2>
+                <span className='product__price'>${product.price}</span>
               </li>
             ))}
           </ul>
