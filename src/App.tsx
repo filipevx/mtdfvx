@@ -5,6 +5,9 @@ import { ReactComponent as DecrementIcon } from './assets/icon-decrement-quantit
 import { ReactComponent as IncrementIcon } from './assets/icon-increment-quantity.svg';
 import { ReactComponent as EmptyCartIcon } from './assets/illustration-empty-cart.svg';
 import { ReactComponent as RemoveIcon } from './assets/icon-remove-item.svg';
+import { ReactComponent as CarbonIcon } from './assets/icon-carbon-neutral.svg';
+import { ReactComponent as OrderConfirmedIcon } from './assets/icon-order-confirmed.svg';
+
 import './css/App.css';
 
 type Product = {
@@ -21,11 +24,13 @@ type CartItem = {
   title: string;
   price: number;
   quantity: number;
+  image: string;
 };
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [modalOpen, setOpenModal] = useState<boolean>(false)
 
   useEffect(() => {
     const getProducts = async () => {
@@ -48,6 +53,12 @@ const App = () => {
       localStorage.setItem('cart', JSON.stringify(cart));
     }
   }, [cart]);
+
+  const resetCart = () => {
+    setCart([])
+    setOpenModal(false)
+    localStorage.setItem('cart', `[]`);
+  };
 
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
@@ -130,7 +141,7 @@ const App = () => {
               </>
             ) : (
               <div>
-                <ul>
+                <ul className='cart__list'>
                   {cart.map((item) => (
                     <li key={item.id} className='cartItem'>
                       <h4 className='cartItem__title'>{item.title}</h4>
@@ -150,11 +161,55 @@ const App = () => {
                     $ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
                   </span>
                 </div>
+                <div className='cart__carbon'>
+                  <CarbonIcon className='carbon-icon' />
+                  <p>
+                    This is a <b>carbon-neutral</b> delivery
+                  </p>
+                </div>  
+                <button className='confirmOrder-button' onClick={() => setOpenModal(true)}>Confirm Order</button>
+                             
               </div>
             )}
           </div>
         </div>
       </div>
+      {modalOpen && (
+        <div className="modal">
+          <div className="modal__content">
+            <OrderConfirmedIcon className="modal__icon" />
+            <h2 className="modal__title">Order Confirmed</h2>
+            <p className="modal__text">We hope you enjoy your food!</p>
+            <div className='modal__block'>
+              <ul className="modal__list">
+                {cart.map((item) => (
+                  <li key={item.id} className="modal__item">
+                    <div className="modal__details">
+                      <img src={item.image} alt={item.title} className="modal__image" />
+                      <div>
+                        <h4 className="modal__name">{item.title}</h4>
+                        <span className="modal__quantity">
+                          {item.quantity}x <span className='modal__price'>@ ${item.price}</span>
+                        </span>
+                      </div>
+                    </div>
+                    <span className="modal__priceTotal">
+                      <b>${(item.price * item.quantity).toFixed(2)}</b>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="modal__total">
+                <p>Order Total</p>
+                <span>$ {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</span>
+              </div>
+            </div>
+            <button className='finishOrder-button' onClick={() => resetCart()}>Start New Order</button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
