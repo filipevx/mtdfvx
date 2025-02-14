@@ -33,8 +33,12 @@
   padding: 20px;
   margin-bottom: 40px;
   position: relative;
+  border: 2px solid transparent;
+  transition: .3s;
 }
-
+.product__imgContainer--selected {
+  border: 2px solid #e1704b;
+}
 .product-addToCart {
   width: 100%;
   max-width: 160px;

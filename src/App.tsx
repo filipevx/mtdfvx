@@ -98,7 +98,7 @@ const App = () => {
           <ul className='products__list'>
             {products.map((product) => (
               <li key={product.id} className='product'>
-                <div className='product__imgContainer'>
+                <div className={`product__imgContainer ${cart.some((item) => item.id === product.id) ? 'product__imgContainer--selected' : ''}`}>
                   <img src={product.image} alt={product.title} width={100} />
                   {!cart.some((item) => item.id === product.id) ? (
                     <button className='product-addToCart' onClick={() => addToCart(product)}><CartIcon className='cart-icon' /> Add to Cart</button>
