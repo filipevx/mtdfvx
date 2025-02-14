@@ -58,8 +58,20 @@ const App = () => {
     setCart([])
     setOpenModal(false)
     localStorage.setItem('cart', `[]`);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
+  const scrollToCart = () => {
+    const cartSection = document.getElementById("cart");
 
+    if (cartSection) {
+      cartSection.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
@@ -131,7 +143,7 @@ const App = () => {
           </ul>
         </div>
 
-        <div className='cart'>
+        <div className='cart' id='cart'>
           <div className='cart__container'>
             <h2 className='cart__title'>Your Cart ({cart.reduce((total, item) => total + item.quantity, 0)})</h2>
             {cart.length === 0 ? (
@@ -209,7 +221,12 @@ const App = () => {
           </div>
         </div>
       )}
-
+      <button 
+        className="scroll-to-cart-btn" 
+        onClick={scrollToCart}
+      >
+        <CartIcon className='cartgo-icon' /> {cart.reduce((total, item) => total + item.quantity, 0)}
+      </button>
     </div>
   );
 };
